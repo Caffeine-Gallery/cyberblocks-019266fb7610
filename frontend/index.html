@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futuristic Robotic Tetris</title>
+    <title>deTetris</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div id="game-container">
+        <h1>deTetris</h1>
         <div id="game-board"></div>
         <div id="side-panel">
-            <div id="next-piece"></div>
+            <div id="next-piece-container">
+                <h3>Next Piece</h3>
+                <div id="next-piece"></div>
+            </div>
             <div id="score">Score: <span id="score-value">0</span></div>
             <div id="level">Level: <span id="level-value">1</span></div>
             <button id="start-button">Start Game</button>
