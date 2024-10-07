@@ -25,6 +25,7 @@ const SHAPES = [
 
 let board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
 let currentPiece = null;
+let nextPiece = null;
 let currentX = 0;
 let currentY = 0;
 let score = 0;
@@ -68,6 +69,20 @@ function drawPiece() {
                 const cellIndex = (currentY + y) * COLS + (currentX + x);
                 cells[cellIndex].style.backgroundColor = currentPiece.color;
             }
+        });
+    });
+}
+
+function drawNextPiece() {
+    nextPieceDisplay.innerHTML = '';
+    nextPiece.shape.forEach((row, y) => {
+        row.forEach((value, x) => {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            if (value) {
+                cell.style.backgroundColor = nextPiece.color;
+            }
+            nextPieceDisplay.appendChild(cell);
         });
     });
 }
@@ -158,9 +173,11 @@ function clearLines() {
 }
 
 function spawnPiece() {
-    currentPiece = createPiece();
+    currentPiece = nextPiece || createPiece();
+    nextPiece = createPiece();
     currentX = Math.floor(COLS / 2) - Math.floor(currentPiece.shape[0].length / 2);
     currentY = 0;
+    drawNextPiece();
     return canMove(currentX, currentY);
 }
 
@@ -190,9 +207,11 @@ function startGame() {
     level = 1;
     scoreDisplay.textContent = score;
     levelDisplay.textContent = level;
+    nextPiece = createPiece();
     spawnPiece();
     drawBoard();
     drawPiece();
+    drawNextPiece();
     if (gameInterval) clearInterval(gameInterval);
     gameInterval = setInterval(moveDown, 1000);
     startButton.disabled = true;
@@ -218,7 +237,7 @@ function playLineClearSound(linesCleared) {
 
 document.addEventListener('keydown', event => {
     if (!isPaused) {
-        switch (event.key) {
+        switch (event.code) {
             case 'ArrowLeft':
                 moveLeft();
                 break;
@@ -228,7 +247,7 @@ document.addEventListener('keydown', event => {
             case 'ArrowDown':
                 moveDown();
                 break;
-            case 'ArrowUp':
+            case 'Space':
                 rotate();
                 drawBoard();
                 drawPiece();
